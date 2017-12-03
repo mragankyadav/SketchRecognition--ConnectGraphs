@@ -30,30 +30,57 @@
 			fig.totalNodeCount = 0
 		}
 		</script>
+		
 
 	</head>
-	<body>	
+	<style>
+	body {
+    background-color: #660000;
+}
+	</style>
+	<body ">	
+	<div class="wrap">
 	<script type="text/paperscript" src="js/main.js" canvas="canvas"></script>	
 	
-	<canvas id="canvas" rezise="true"  style="position:relative;top:0px;left:0px;"></canvas>
 	
-	<div id="title" style="position:absolute;top:0px;left:10px;border:10px;padding: 1px;display: block;"> 
-	<h2> Connect Graphs </h2>
+<!-- 	<div class ='float-left'> -->
+	<h2><font color="white"> Graph Pad </font> </h2>
+<!-- 	</div> -->
+<!-- 	<div class='float-right'> -->
+<div id="title" style="position:absolute;top:80px;left:82%;border:10px;padding: 1px;display: block;"> 
+	 <div class="buttons btn-group">
+	<button type="button" class="btn btn-primary"> Clear Sketch</button>
+	<button type="button" class="btn btn-primary"> Show Original</button>
+	<button type="button" class="btn btn-primary">Undo</button>
+	</div>
+	</div>
+<!-- 	</div> -->
+	
+
+	
+	<div>
+	<canvas id="canvas"  style='width:100%;height:75%'></canvas>
 	</div>
 
-	<div id="menu" style="position:absolute;bottom:0;width:100%;padding: 20px;display: block;"> 
-		<div style="float: left; padding: 5px">
-			<button type="button" class = "connect" onclick="connectedGraphs(fig)">Is Graph Connected?</button>
-			<button id = "connected_results" class="no-click">Yes/No</button>
-		</div>
-<!-- 		<input id="shortest" type="button" class = "button" value="Is Graph Connected" onclick="RunShortestPath(fig)"></input></div> -->
-		<br/>
-		<div style="clear: left; padding: 5px">
-			<button type="button" class = "connect" onclick="isBipartite(fig)">Is Graph Bipartite?</button>
-			<button class="no-click">Yes/No</button>
-		</div>
-<!-- 		<div style="float: left"><input id="shortest" type="button" class = "button" value="Is Graph Bipartite" onclick="RunShortestPath(fig)"></input></div> -->
-	</div>
+
+   
+<button type="button" class="btn btn-primary btn-lg btn-block" onclick="connectedGraphs(fig)">Is Graph Connected?</button>
+<button id = "connected_results" class="no-click">Yes/No</button>
+     
+
+<button type="button" class="btn btn-primary btn-lg btn-block" onclick="isBipartite(fig)">Is Graph Bipartite?</button>
+<button class="no-click">Yes/No</button>
+<div class="btn-group btn-group-justified" role="group" aria-label="...">
+<div class="btn-group" role="group">
+<button type="button" class="btn btn-primary">Show Graph Partitions</button>
+</div>
+<div class="btn-group" role="group">
+<button type="button" class="btn btn-primary">Hide Graph Partitions</button>
+</div>
+</div>
+
+
+</div>
    </body>
  </html>
 

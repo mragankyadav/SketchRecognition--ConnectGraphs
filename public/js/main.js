@@ -1,8 +1,3 @@
-function onResize(event) {
-	// Whenever the window is resized, recenter the path:
-	// path.position = view.center;
-}
-
 var mouseMovepath = new Path.Circle({
     center: [0, 0],
     radius: 5,
@@ -51,6 +46,8 @@ function onMouseUp(event) {
 	var scribbleResult = isScribble(points,path)
 	
 	// Scribble detection
+	min1 = getClosestDistance(points[0], fig.getNodes);
+	min2 = getClosestDistance(points[points.length-1], fig.getNodes);
  	if(scribbleResult["isScribble"] == true){
  		if(scribbleResult["type"] == "edge"){
  			removeEdge(scribbleResult["componentId"])
@@ -107,6 +104,26 @@ function onMouseUp(event) {
 
 		// <!-- Edge weight -->
 		var center = new Point ((points[0].getX()+points[points.length-1].getX())/2, (points[0].getY()+points[points.length-1].getY())/2)
+	}
+	
+	else if(min1 <=30 && min2 <= 30)
+	{
+		var myLine = new Path.Arc(points[0],points[points.length/2], points[points.length-1])
+		myLine.strokeColor = 'blue';
+		path.visible = false;
+
+		// <!-- Update model -->
+		var edge = new Edge(fig.getUndirected.length)
+		edge.endpoints = []
+		edge.endpoints.push(points[0])
+		edge.endpoints.push(points[points.length-1])
+		edge.path = myLine
+		edge.isDirectedEdge = false
+		edge.original = path
+		fig.addUndirected(edge)
+
+		// <!-- Edge weight -->
+		var center = new Point ((points[0].getX()+points[points.length-1].getX())/2, (points[0].getY()+points[points.length-1].getY())/2)		
 	}
 	// <!-- Not recognized -->
 	else{

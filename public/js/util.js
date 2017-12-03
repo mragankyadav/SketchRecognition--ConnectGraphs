@@ -43,220 +43,101 @@
 		
 	}
 	
+	function separateNodes(color0, color1) {
+		animate(color0,0);
+/* 		for (var i=0;i<color0.length;i++) {
+			color0[i].strokeColor = 'yellow';
+			
+		} */
+	}
+	
+	function isBipartiteUtil(nodes, edges, i, graph, colorArr, color1, color0) {
+		colorArr[i] = 1;
+		color1.push(nodes[i].path);
+		var queue = [];
+		queue.push(i);
+		while (queue.length != 0) {
+			var u = queue.pop();
+			if (graph[u][u] == 1) {
+				return false;
+			}
+			for (var v = 0; v< nodes.length; v++) {
+				if (graph[u][v] == 1 && colorArr[v] == -1) {
+					colorArr[v] = 1 - colorArr[u];
+					if (colorArr[v] == 0) {
+						color0.push(nodes[v].path);
+					}
+					else {
+						color1.push(nodes[v].path);
+					}
+					queue.push(v);
+				}
+				else if (graph[u][v] == 1 && colorArr[v] == colorArr[u]) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
 	
 	function isBipartite(fig) {
-		
-		
-	}
-	
-	
-	function RunShortestPath(fig){
-
 		var nodes = fig.getNodes
 		var edges = fig.getUndirected
-
-		if(nodes.length == 0 || edges.length > combinations(nodes.length,2)){
-			alert("Not a graph")
-			return
-		}
-
 		Recognize(fig)
 		ClearAnimation()
-
-		var paths = Shortest(nodes,edges)
-		fig.oldpaths = paths
-		animate(paths,0)
-	}
-
-	function Shortest(nodes,edges){
-
-		var paths = []
-		var select = document.getElementById("sourcenode")
-		var src = select.selectedIndex
-		select = document.getElementById("destnode")
-		dest = select.selectedIndex
-
-		// Animate only node if source = destination
-		if(src == dest){
-			paths.push(nodes[src].path)
-			return paths
+		var graph = new Array(nodes.length);
+		for (var i=0;i<graph.length;i++) {
+			graph[i] = new Array(nodes.length);
+			for (var j = 0; j< nodes.length;j++) {
+				graph[i][j] = 0;
+			}
 		}
-
-		var queue = new PriorityQueue();
-		for(var i = 0; i < nodes.length; i++){
-			if(i==src){
-				nodes[i].path.data.priority = 0
-			}
-			else{
-				nodes[i].path.data.priority = Infinity
-			}
-			nodes[i].path.data.prevEdgeId = -1
-			queue.enqueue(nodes[i], nodes[i].path.data.priority);	
-		}
-		
-		var visited = new Array(nodes.length)
-		for(var i=0;i<nodes.length;i++)
-			visited[i] = false
-
-		while(!queue.isEmpty()){
-			var node = queue.dequeue()
-
-			// No path to destination node
-			if(!node || node.path.data.priority == Infinity)
-				break
-
-			
-			// If reached destination node
-			if(node.getId == dest){
-				while(node.path.data.prevEdgeId != -1){
-					var prevEdge = edges[node.path.data.prevEdgeId]
-					paths.push(node.path)
-					paths.push(prevEdge.path)
-					if(typeof prevEdge.arrowPath != 'undefined')
-						paths.push(prevEdge.arrowPath)
-					if(prevEdge.getStart.getId == node.getId)
-						node = prevEdge.getEnd
-					else
-						node = prevEdge.getStart
-				}
-				paths.push(node.path)
-				paths.reverse()
-				return paths
-			}
-			
-			visited[node.getId] = true
-			// Relax neighbors
-			for(var i = 0;i < node.getEdges.length; i++){
-				var edge = node.getEdges[i]
-				var othernode
+		for (var n = 0; n<nodes.length;n++) {
+			node = nodes[n];
+			for (var i = 0;i < node.getEdges.length; i++) {
+				var edge = node.getEdges[i];
+				var othernode;
 				if(edge.getStart.getId == node.getId)
 					othernode = edge.getEnd
 				else{
-					if(edge.isDirectedEdge){
-						continue
-					} else {
-						othernode = edge.getStart
-					}
+					othernode = edge.getStart
 				}
-				if( visited[othernode.getId] == false){
-					if(othernode.path.data.priority > node.path.data.priority + edge.getValue){
-						othernode.path.data.priority = node.path.data.priority + edge.getValue
-						othernode.path.data.prevEdgeId = edge.getId
-						queue.enqueue(othernode,othernode.path.data.priority)
-					}
-				}
-
+				graph[node.getId][othernode.getId] = 1;
 			}
 		}
-		alert('No path exists between ' + nodes[src].getName + ' and ' + nodes[dest].getName +' !')
-		return paths
+		var colorArr = new Array(nodes.length);
+		for (var i=0;i<colorArr.length;i++) {
+			colorArr[i] = -1;
+		}
+		var color0 = [];
+		var color1 = [];
+		for (var i =0; i< nodes.length;i++) {
+			if (colorArr[i] == -1) {
+				var value = isBipartiteUtil(nodes, edges, i, graph, colorArr, color1, color0);
+				if (value == false) {
+					alert('non bipartite');
+					return false;
+				}
+				
+			}
+		}
+		separateNodes(color0,color1);
+		alert("bipartite");
+		return true;
 	}
 
-	function RunMST(fig){
-
-		var nodes = fig.getNodes
-		var edges = fig.getUndirected
-
-		if(nodes.length == 0 || edges.length > combinations(nodes.length,2)){
-			alert("Not a graph")
-			return
+	function getClosest(point, nodes){
+		var min = point.distance(nodes[0].getCenter)
+		var closest = nodes[0]
+		for(var i=1;i<nodes.length;i++){
+			if(min > point.distance(nodes[i].getCenter)){
+				min = point.distance(nodes[i].getCenter)
+				closest = nodes[i]
+			}
 		}
-
-		Recognize(fig)
-		ClearAnimation()
-
-		var select = document.getElementById("startnodes")
-		fig.setStartNode = select.selectedIndex
-
-		if(IsGraphConnected(nodes,edges)){
-			var paths = RunPrimsMST(nodes,edges)
-			fig.oldpaths = paths
-			animate(paths,0)
-		}
-		else{
-			alert('Graph is not connected')
-		}
+		return closest
 	}
-
-	function RunPrimsMST(nodes,edges){
-		var paths = []
-		var src = fig.getStartNode //Change to dynamic later
-
-		var queue = new PriorityQueue();
-		for(var i = 0; i < nodes.length; i++){
-			var priority
-			if(i==src){
-				priority = 0
-			}
-			else{
-				priority = Infinity
-			}
-			nodes[i].path.data.prevEdgeId = -1
-			queue.enqueue(nodes[i], priority)	
-		}
-		
-		var visited = new Array(nodes.length)
-		for(var i=0;i<nodes.length;i++)
-			visited[i] = false
-
-		while(!queue.isEmpty()){
-			var node = queue.dequeue()
-			if(visited[node.getId]==true)
-				continue
-			visited[node.getId]=true
-
-			// Push node path and connecting edge path
-			if(node.path.data.prevEdgeId != -1){
-				var prevEdge = edges[node.path.data.prevEdgeId]
-				paths.push(prevEdge.path)
-			}
-			paths.push(node.path)
-
-			// Relax neighboring edges
-			for(var i = 0;i < node.getEdges.length; i++){
-				var edge = node.getEdges[i]
-				var othernode
-				if(edge.getStart.getId == node.getId)
-					othernode = edge.getEnd
-				else{
-					if(edge.isDirectedEdge){
-						continue
-					} else {
-						othernode = edge.getStart
-					}
-				}
-				if( visited[othernode.getId] == false){
-					if(othernode.path.data.prevEdgeId == -1){
-						othernode.path.data.prevEdgeId = edge.getId
-						queue.enqueue(othernode,edge.getValue)
-					}
-					else{
-						if(edge.getValue < edges[othernode.path.data.prevEdgeId].getValue){
-							othernode.path.data.prevEdgeId = edge.getId
-							queue.enqueue(othernode,edge.getValue)
-						}
-					}
-				}
-
-			}
-
-		}
-		return paths
-	}
-
-	function IsGraphConnected(nodes,edges){
-		var paths = []
-		var visited = new Array(nodes.length)
-		for(var i=0;i<nodes.length;i++)
-			visited[i] = false
-		runBFS(nodes,edges,visited,fig.getStartNode)
-		for(var i=0;i<nodes.length;i++){
-			if(visited[i] == false)
-				return false
-		}
-		return true
-	}
-
+	
 	function Recognize(fig){
 		console.log("Num of nodes : " + fig.getNodes.length)
 		console.log("Num of edges : " + fig.getUndirected.length)
@@ -304,27 +185,7 @@
 		console.log(JSON.stringify(matrix))
 		
 	}
-
-	function BFS(){
-		var nodes = fig.getNodes
-		var edges = fig.getUndirected
-
-		if(nodes.length == 0 || edges.length > combinations(nodes.length,2)){
-			alert("Not a graph")
-			return
-		}
-		var select = document.getElementById("startnodes")
-		fig.setStartNode = select.selectedIndex
-
-		Recognize(fig)
-		ClearAnimation()
-		
-		var paths = runBFSOnGraph(nodes,edges)
-		fig.oldpaths = paths
-		animate(paths,0)
-	}
-
-
+	
 	// sleep time expects milliseconds
 	function sleep (time) {
 	  return new Promise((resolve) => setTimeout(resolve, time));
@@ -334,74 +195,14 @@
 	// Usage!
 	if(index == paths.length)
 			return
-	sleep(1000).then(() => {
+	sleep(10).then(() => {
 	    // Do something after the sleep!
 	    paths[index].data.originalStrokeColor = paths[index].strokeColor
-	    paths[index].strokeColor = 'black'
+	    paths[index].strokeColor = 'yellow'
 	    paths[index].data.originalStrokeWidth = paths[index].strokeWidth
 	    paths[index].strokeWidth = 5
 	    animate(paths,index+1)
 	});
-	}
-
-	function runBFSOnGraph(nodes,edges){
-		var paths = []
-		var visited = new Array(nodes.length)
-		for(var i=0;i<nodes.length;i++)
-			visited[i] = false
-		paths = paths.concat(runBFS(nodes,edges,visited,fig.getStartNode))
-		for(var i=0;i<nodes.length;i++){
-			if(visited[i] == false)
-				paths = paths.concat(runBFS(nodes,edges,visited,i))
-		}
-		return paths
-	}
-
-	function runBFS(nodes,edges,visited,index){
-		var paths = []
-		var Q = []
-		Q.push(index)
-		visited[index] = true
-		paths.push(nodes[index].path)
-
-		while(Q.length > 0){
-			var node = nodes[Q.shift()]
-			for(var i = 0;i < node.getEdges.length; i++){
-				var edge = node.getEdges[i]
-				var othernode
-
-				if(edge.getStart.getId == node.getId)
-					othernode = edge.getEnd
-				else{
-					if(edge.isDirectedEdge){
-						continue
-					} else {
-						othernode = edge.getStart
-					}
-				}
-				if( visited[othernode.getId] == false){
-					paths.push(edge.path)
-					if(typeof edge.arrowPath != 'undefined')
-						paths.push(edge.arrowPath)
-					paths.push(othernode.path)
-					Q.push(othernode.getId)
-					visited[othernode.getId] = true
-				}
-			}
-		}
-		return paths
-	}
-
-	function getClosest(point, nodes){
-		var min = point.distance(nodes[0].getCenter)
-		var closest = nodes[0]
-		for(var i=1;i<nodes.length;i++){
-			if(min > point.distance(nodes[i].getCenter)){
-				min = point.distance(nodes[i].getCenter)
-				closest = nodes[i]
-			}
-		}
-		return closest
 	}
 
 	function product_Range(a,b) {  
@@ -622,72 +423,6 @@
 	    menuBox.style.display = "block"
 	    document.getElementById('showmenubtn').style.display = "none"
 	  }
-	}
-
-	//Run DFS on Graph
-	function DFS() {
-		var nodes = fig.getNodes
-		var edges = fig.getUndirected
-
-		if(nodes.length == 0 || edges.length > combinations(nodes.length,2)){
-			alert("Not a graph")
-			return
-		}
-
-		var select = document.getElementById("startnodes")
-		fig.setStartNode = select.selectedIndex
-
-		Recognize(fig)
-		ClearAnimation()
-
-		var paths = runDFSOnGraph(nodes,edges)
-		fig.oldpaths = paths
-		animate(paths,0)
-	}
-
-	function runDFSOnGraph(nodes,edges){
-		var paths = []
-		var path = []
-		var visited = new Array(nodes.length)
-		for(var i=0;i<nodes.length;i++)
-			visited[i] = false
-		runDFS(nodes,edges,visited,fig.getStartNode,path)
-		paths = paths.concat(path)
-		path.length = 0
-		for(var i=0;i<nodes.length;i++){
-			if(visited[i] == false){
-				runDFS(nodes,edges,visited,i,path)
-			}
-		}
-		paths = paths.concat(path)
-		return paths
-	}
-
-	function runDFS(nodes,edges,visited,index,paths){
-		visited[index] = true
-		paths.push(nodes[index].path)
-		var node = nodes[index]
-
-		for(var i = 0;i < node.getEdges.length; i++){
-			var edge = node.getEdges[i]
-			var othernode
-			if(edge.getStart.getId == node.getId)
-				othernode = edge.getEnd
-			else{
-				if(edge.isDirectedEdge){
-					continue
-				} else {
-					othernode = edge.getStart
-				}
-			}
-
-			if(visited[othernode.getId] == false){
-				paths.push(edge.path)
-				if(typeof edge.arrowPath != 'undefined')
-					paths.push(edge.arrowPath)
-				runDFS(nodes,edges,visited,othernode.getId,paths)
-			}
-		}
 	}
 
 	//For selecting the graph types

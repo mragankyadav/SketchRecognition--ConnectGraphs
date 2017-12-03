@@ -1,0 +1,59 @@
+ <html>
+	<head>
+		<title>PaperJS - Starter Canvas</title>
+		<!-- An AMD-loader like RequireJS is necessary for srlib's asynchronous modules -->
+		<script src="js/require.js"></script>
+		<!-- Load srlib following RequireJS -->
+		<script src="js/srlib.js"></script>	
+		<!--Paper JS-->
+		<script src="js/paper-full.js"></script>
+		<!--Fonts and styling-->
+		<link href="css/style.css" rel='stylesheet' type='text/css'/>
+   
+		<script type="text/javascript" src="js/model.js"></script>
+		<script type="text/javascript" src="js/rubine.js"></script>
+		<script type="text/javascript" src="js/priority-queue.js"></script>		
+		<script type="text/javascript" src="js/util.js"></script>
+		<!-- Latest compiled and minified CSS -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+		<!-- jQuery library -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+		<!-- Latest compiled JavaScript -->
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+		<script type="text/javascript">
+		window.onload = function(){
+			fig = new Figure()
+			fig.oldpaths = []
+			fig.totalNodeCount = 0
+		}
+		</script>
+
+	</head>
+	<body>	
+	<script type="text/paperscript" src="js/main.js" canvas="canvas"></script>	
+	
+	<canvas id="canvas" rezise="true"  style="position:relative;top:0px;left:0px;"></canvas>
+	
+	<div id="title" style="position:absolute;top:0px;left:10px;border:10px;padding: 1px;display: block;"> 
+	<h2> Connect Graphs </h2>
+	</div>
+
+	<div id="menu" style="position:absolute;bottom:0;width:100%;padding: 20px;display: block;"> 
+		<div style="float: left; padding: 5px">
+			<button type="button" class = "connect" onclick="connectedGraphs(fig)">Is Graph Connected?</button>
+			<button id = "connected_results" class="no-click">Yes/No</button>
+		</div>
+<!-- 		<input id="shortest" type="button" class = "button" value="Is Graph Connected" onclick="RunShortestPath(fig)"></input></div> -->
+		<br/>
+		<div style="clear: left; padding: 5px">
+			<button type="button" class = "connect">Is Graph Bipartite?</button>
+			<button class="no-click">Yes/No</button>
+		</div>
+<!-- 		<div style="float: left"><input id="shortest" type="button" class = "button" value="Is Graph Bipartite" onclick="RunShortestPath(fig)"></input></div> -->
+	</div>
+   </body>
+ </html>
+

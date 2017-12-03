@@ -1,0 +1,14 @@
+{
+  "name": "truss",
+  "version": "1.0.0",
+  "description": "sketch project",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "shivanshu_kritika",
+  "license": "ISC",
+  "dependencies": {
+    "express": "*"
+  }
+}

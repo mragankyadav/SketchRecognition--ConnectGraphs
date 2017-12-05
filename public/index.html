@@ -12,7 +12,7 @@
    
 		<script type="text/javascript" src="js/model.js"></script>
 		<script type="text/javascript" src="js/rubine.js"></script>
-		<script type="text/javascript" src="js/priority-queue.js"></script>		
+		
 		<script type="text/javascript" src="js/util.js"></script>
 		<!-- Latest compiled and minified CSS -->
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -49,8 +49,8 @@
 <!-- 	<div class='float-right'> -->
 <div id="title" style="position:absolute;top:80px;left:82%;border:10px;padding: 1px;display: block;"> 
 	 <div class="buttons btn-group">
-	<button type="button" class="btn btn-primary"> Clear Sketch</button>
-	<button type="button" class="btn btn-primary"> Show Original</button>
+	<button id="clear" type="button" class="btn btn-primary" onclick="ClearAnimation()"> Clear Sketch</button>
+	<button id="original" type="button" class="btn btn-primary" onclick="Original(fig)"> Show Original</button>
 	<button type="button" class="btn btn-primary">Undo</button>
 	</div>
 	</div>

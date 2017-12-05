@@ -35,10 +35,10 @@ function connectedGraphs(fig) {
 	}
 	
 	if (count == nodes.length) {
-		alert("connected");
+		document.getElementById('isconnected').value = "Yes";
 		return true;
 	}
-	alert("not connected");
+	document.getElementById('isconnected').value = "No";
 	return false;
 	
 }
@@ -115,14 +115,14 @@ function isBipartite(fig) {
 		if (colorArr[i] == -1) {
 			var value = isBipartiteUtil(nodes, edges, i, graph, colorArr, color1, color0);
 			if (value == false) {
-				alert('non bipartite');
+				document.getElementById('isbipartite').value = "No";
 				return false;
 			}
 			
 		}
 	}
 	separateNodes(color0,color1);
-	alert("bipartite");
+	document.getElementById('isbipartite').value = "Yes";
 	return true;
 }
 
@@ -343,6 +343,47 @@ function isScribble(points,path){
 	return {"isScribble" : true,"componentId" : maxIntersectionComponentId,"type" : maxInterType}
 }
 
+function undo(fig)
+{
+	elem = fig.getLastAdded.length - 1
+	if (elem >= 0 && fig.getLastAdded[elem] == "edge")
+	{
+		removeEdge(fig.getUndirected.length - 1)
+		fig.getLastAdded.pop()
+	}
+	else if (elem >= 0)
+	{
+		removeNodeOnly(fig.getNodes.length - 1)
+		fig.getLastAdded.pop()
+	}
+}
+
+function clearSketch(fig)
+{
+	len = fig.getLastAdded.length;
+	for(var i = 0; i < len; i++)
+	{
+		undo(fig);
+	}
+}
+
+function removeNodeOnly(edgeId){
+	var edges = fig.getNodes
+	if(edgeId >= 0 && edgeId < edges.length){
+		var edgeToRemove = edges[edgeId]
+		edges.splice(edgeId,1)
+		for(var i = edgeId;i < edges.length;i++){
+			var edge = edges[i]
+			edge.setId = i
+			edge.text.data.edgeId = i
+		}
+		edgeToRemove.setId = -1
+		edgeToRemove.original.remove()
+		edgeToRemove.path.remove()
+		edgeToRemove.text.remove()
+	}
+}
+
 function removeEdge(edgeId){
 	var edges = fig.getUndirected
 	if(edgeId >= 0 && edgeId < edges.length){
@@ -354,12 +395,8 @@ function removeEdge(edgeId){
 			edge.text.data.edgeId = i
 		}
 		edgeToRemove.setId = -1
-		edgeToRemove.text.remove()
 		edgeToRemove.original.remove()
 		edgeToRemove.path.remove()
-		if(typeof edgeToRemove.arrowPath != 'undefined')
-			edgeToRemove.arrowPath.remove()
-		console.log(edges)
 	}
 }
 

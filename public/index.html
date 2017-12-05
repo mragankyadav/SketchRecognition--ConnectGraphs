@@ -49,9 +49,9 @@
 <!-- 	<div class='float-right'> -->
 <div id="title" style="position:absolute;top:80px;left:82%;border:10px;padding: 1px;display: block;"> 
 	 <div class="buttons btn-group">
-	<button id="clear" type="button" class="btn btn-primary" onclick="ClearAnimation()"> Clear Sketch</button>
-	<button id="original" type="button" class="btn btn-primary" onclick="Original(fig)"> Show Original</button>
-	<button type="button" class="btn btn-primary">Undo</button>
+	<button type="button" class="btn btn-primary" onclick="clearSketch(fig)">Clear Sketch</button>
+	<input id="original" type="button" class = "btn btn-primary" value="Show Original" onclick="Original(fig)"></input>
+	<button type="button" class="btn btn-primary" onclick="undo(fig)">Undo</button>
 	</div>
 	</div>
 <!-- 	</div> -->
@@ -65,11 +65,10 @@
 
    
 <button type="button" class="btn btn-primary btn-lg btn-block" onclick="connectedGraphs(fig)">Is Graph Connected?</button>
-<button id = "connected_results" class="no-click">Yes/No</button>
+<input type="button" id = "isconnected" class="no-click" value="Yes/No"></input>
      
-
 <button type="button" class="btn btn-primary btn-lg btn-block" onclick="isBipartite(fig)">Is Graph Bipartite?</button>
-<button class="no-click">Yes/No</button>
+<input id="isbipartite" value="Yes/No" type="button" class="no-click"></input>
 <div class="btn-group btn-group-justified" role="group" aria-label="...">
 <div class="btn-group" role="group">
 <button type="button" class="btn btn-primary">Show Graph Partitions</button>

@@ -43,22 +43,11 @@ function onMouseUp(event) {
 	
 	// Add evaluation / recognition functions or whatever you want here!
 	var points = stroke.getPoints()
-	var scribbleResult = isScribble(points,path)
 	
 	// Scribble detection
 	min1 = getClosestDistance(points[0], fig.getNodes);
 	min2 = getClosestDistance(points[points.length-1], fig.getNodes);
- 	if(scribbleResult["isScribble"] == true){
- 		if(scribbleResult["type"] == "edge"){
- 			removeEdge(scribbleResult["componentId"])
- 		}
- 		else{
- 			removeNode(scribbleResult["componentId"])
- 		}
- 		path.remove()
- 	}
- 	// Circle
- 	else if(isCircle(points,path)){
+	if(isCircle(points,path)){
 		var BB = new srlib.core.data.container.BoundingBox(stroke);
 		var center = new Point( ((BB.getMaxX() + BB.getMinX()  )/2  ) ,( ( BB.getMaxY() + BB.getMinY() )/2 ) )
 		var myCircle = new Path.Circle(center, 25);
@@ -85,6 +74,7 @@ function onMouseUp(event) {
 
 // <!-- Add node to figure -->
 		fig.addNode(node) 
+		fig.addLastAdded("node");
 	}
 	// <!-- Line -->
 	else if(isLine(points)){
@@ -101,6 +91,7 @@ function onMouseUp(event) {
 		edge.isDirectedEdge = false
 		edge.original = path
 		fig.addUndirected(edge)
+		fig.addLastAdded("edge");
 
 		// <!-- Edge weight -->
 		var center = new Point ((points[0].getX()+points[points.length-1].getX())/2, (points[0].getY()+points[points.length-1].getY())/2)
@@ -108,6 +99,7 @@ function onMouseUp(event) {
 	
 	else if(min1 <=30 && min2 <= 30)
 	{
+		try{
 		var myLine = new Path.Arc(points[0],points[points.length/2], points[points.length-1])
 		myLine.strokeColor = 'blue';
 		path.visible = false;
@@ -121,9 +113,15 @@ function onMouseUp(event) {
 		edge.isDirectedEdge = false
 		edge.original = path
 		fig.addUndirected(edge)
+		fig.addLastAdded("edge");
 
 		// <!-- Edge weight -->
 		var center = new Point ((points[0].getX()+points[points.length-1].getX())/2, (points[0].getY()+points[points.length-1].getY())/2)		
+		}
+		catch(err)
+		{
+			path.removeSegments();
+		}
 	}
 	// <!-- Not recognized -->
 	else{

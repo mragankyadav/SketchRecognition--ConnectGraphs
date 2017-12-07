@@ -35,19 +35,37 @@
 	</head>
 	<style>
 	body {
-    background-color: #660000;
+    background-color: #FFFFFF;
 }
 	</style>
-	<body ">	
-	<div class="wrap">
+	<body>	
+	<div style="width: 25%; float:left">
+	 <div class="card" style="width: 30rem; height =100rem;">
+  <img class="card-img-top" src="graph.png" alt="Card image cap"  width="320" style="top:10px">
+  <div class="card-block">
+    <h4 class="card-title">Recognition of Connected and Bipartite Graphs</h4>
+    <p class="card-text">A hand drawn sketch recognition system that recognises the graph components and provides instant feedback along with insights related to the sketched graph.</p>
+  </div>
+  <div style="height:350px; width:100%; clear:both;"></div>
+  Team Members
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item">Mragank Yadav</li>
+    <li class="list-group-item">Shivanshu Arora</li>
+    <li class="list-group-item">Kritika Kurani</li>
+    <li class="list-group-item">Kaushik Raju</li>
+  </ul>
+
+</div>
+	</div>
+	<div style="width: 75%;height: 110%; float:right">
 	<script type="text/paperscript" src="js/main.js" canvas="canvas"></script>	
 	
 	
 <!-- 	<div class ='float-left'> -->
-	<h2><font color="white"> Graph Pad </font> </h2>
+	<h2><font color="black"> Graph Pad </font> </h2>
 <!-- 	</div> -->
 <!-- 	<div class='float-right'> -->
-<div id="title" style="position:absolute;top:80px;left:82%;border:10px;padding: 1px;display: block;"> 
+<div id="title" style="position:absolute;top:80px;left:80%;border:10px;padding: 1px;display: block; "> 
 	 <div class="buttons btn-group">
 	<button type="button" class="btn btn-primary" onclick="clearSketch(fig)">Clear Sketch</button>
 	<input id="original" type="button" class = "btn btn-primary" value="Show Original" onclick="Original(fig)"></input>
@@ -63,23 +81,24 @@
 	</div>
 
 
-   
-<button type="button" class="btn btn-primary btn-lg btn-block" onclick="connectedGraphs(fig)">Is Graph Connected?</button>
-<input type="button" id = "isconnected" class="no-click" value="Yes/No"></input>
-     
-<button type="button" class="btn btn-primary btn-lg btn-block" onclick="isBipartite(fig)">Is Graph Bipartite?</button>
-<input id="isbipartite" value="Yes/No" type="button" class="no-click"></input>
-<div class="btn-group btn-group-justified" role="group" aria-label="...">
-<div class="btn-group" role="group">
-<button type="button" class="btn btn-primary">Show Graph Partitions</button>
+<div class="btn-group btn-group-justified ">
+<div class="btn-group ">
+<button type="button" class="btn btn-primary btn-block" onclick="connectedGraphs(fig)">Is Graph Connected?</button>
 </div>
-<div class="btn-group" role="group">
-<button type="button" class="btn btn-primary">Hide Graph Partitions</button>
+<div class="btn-group ">
+<input type="button" id = "isconnected" class="btn btn-primary-outline no-click" value="Yes/No"></input>
+</div>
+</div>
+<div class="btn-group btn-group-justified ">
+<div class="btn-group ">   
+<button type="button" class="btn btn-primary btn-block" onclick="isBipartite(fig)">Is Graph Bipartite?</button>
+</div>
+<div class="btn-group ">   
+<input id="isbipartite" value="Yes/No" type="button" class="btn btn-primary-outline no-click"></input>
 </div>
 </div>
 
 
-</div>
+
    </body>
  </html>
-

@@ -36,5 +36,21 @@ body {
 div.wrap {
     width:80%;
     margin-left:20%;
+    
 }
 
+#btnSearch,
+#btnClear{
+    display: inline-block;
+    vertical-align: top;
+}
+
+.btn-primary-outline {
+  background-color: #cdcdcd;
+  border-color: #ccc;
+}
+
+html, body {
+    margin: 0;
+    height: 100%;
+}

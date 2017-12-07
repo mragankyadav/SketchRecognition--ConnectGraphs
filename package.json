@@ -6,9 +6,12 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "shivanshu_kritika",
+  "author": "shivanshu_kritika_mragank_kaushik",
   "license": "ISC",
   "dependencies": {
     "express": "*"
-  }
+  },
+  "scripts": {
+    "start": "node your-script.js"
+}
 }
